@@ -801,7 +801,7 @@ extension TabViewController: WKNavigationDelegate {
     }
 
     func createHandoff() {
-        guard let urlString = webView.url?.absoluteString else {
+        guard webView.url?.absoluteString != nil else {
             userActivity = nil
             return
         }
@@ -809,8 +809,17 @@ extension TabViewController: WKNavigationDelegate {
         let activity = NSUserActivity(activityType: "com.duckduckgo.handoff.webpage")
         activity.isEligibleForHandoff = true
         activity.requiredUserInfoKeys = [Constants.handoffUrlKey]
-        activity.userInfo = [Constants.handoffUrlKey: urlString]
         userActivity = activity
+    }
+
+    override func updateUserActivityState(_ activity: NSUserActivity) {
+        guard let urlString = webView.url?.absoluteString else {
+            userActivity = nil
+            return
+        }
+
+        activity.title = webView.title
+        activity.addUserInfoEntries(from: [Constants.handoffUrlKey: urlString])
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {

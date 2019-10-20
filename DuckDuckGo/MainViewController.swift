@@ -368,6 +368,7 @@ class MainViewController: UIViewController {
     fileprivate func select(tab: TabViewController) {
         addToView(tab: tab)
         refreshControls()
+        tab.createHandoff()
     }
 
     private func addToView(tab: TabViewController) {
