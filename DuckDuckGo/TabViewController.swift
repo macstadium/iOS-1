@@ -32,6 +32,7 @@ class TabViewController: UIViewController {
         static let urlCouldNotBeLoaded = 101
         static let frameLoadInterruptedErrorCode = 102
         static let minimumProgress: CGFloat = 0.1
+        static let handoffUrlKey = "url"
     }
 
     private struct UserAgent {
@@ -796,8 +797,22 @@ extension TabViewController: WKNavigationDelegate {
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
         delegate?.tabLoadingStateDidChange(tab: self)
         tips?.onFinishedLoading(url: url, error: isError)
+        createHandoff()
     }
-    
+
+    func createHandoff() {
+        guard let urlString = webView.url?.absoluteString else {
+            userActivity = nil
+            return
+        }
+
+        let activity = NSUserActivity(activityType: "com.duckduckgo.handoff.webpage")
+        activity.isEligibleForHandoff = true
+        activity.requiredUserInfoKeys = [Constants.handoffUrlKey]
+        activity.userInfo = [Constants.handoffUrlKey: urlString]
+        userActivity = activity
+    }
+
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         hideProgressIndicator()
         webpageDidFailToLoad()
