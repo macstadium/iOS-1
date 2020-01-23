@@ -71,17 +71,20 @@ public class HTTPSUpgrade {
             return
         }
         
-        isInServiceUpgradeList(host: host) { result in
-            Logger.log(text: "\(host) \(result.isInList ? "is" : "is not") service upgradable")
-            PersistentLogger.log(formatFileInfo(#file, #line), #function, "Request \(result.isInList ? "is" : "is not") service upgradable")
-            if result.isInList {
-                Pixel.fire(pixel: result.isCached ? .httpsServiceCacheUpdgrade : .httpsServiceRequestUpgrade)
-                completion(true)
-            } else {
-                Pixel.fire(pixel: result.isCached ? .httpsServiceCacheNoUpdgrade : .httpsServiceRequestNoUpdgrade)
-                completion(false)
-            }
-        }
+        PersistentLogger.log(formatFileInfo(#file, #line), #function, "Ignoring async upgrade")
+        completion(false)
+        
+//        isInServiceUpgradeList(host: host) { result in
+//            Logger.log(text: "\(host) \(result.isInList ? "is" : "is not") service upgradable")
+//            PersistentLogger.log(formatFileInfo(#file, #line), #function, "Request \(result.isInList ? "is" : "is not") service upgradable")
+//            if result.isInList {
+//                Pixel.fire(pixel: result.isCached ? .httpsServiceCacheUpdgrade : .httpsServiceRequestUpgrade)
+//                completion(true)
+//            } else {
+//                Pixel.fire(pixel: result.isCached ? .httpsServiceCacheNoUpdgrade : .httpsServiceRequestNoUpdgrade)
+//                completion(false)
+//            }
+//        }
     }
     
     private func isInLocalUpgradeList(host: String) -> Bool {
