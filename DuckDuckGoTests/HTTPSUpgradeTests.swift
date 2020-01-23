@@ -74,22 +74,22 @@ class HTTPSUpgradeTests: XCTestCase {
         waitForExpectations(timeout: 1.0, handler: nil)
     }
 
-    func testWhenURLIsHttpAndCannotBeUpgradedLocallyButCanBeUpgradedByServiceThenShouldUpgradeIsTrue() {
-        let expect = expectation(description: "Http url not in local but in service list should be upgraded")
-        let url = URL(string: "http://service.url")!
-        stub(condition: isHost(host)) { _ in
-            return fixture(filePath: self.serviceResponseJson(), status: 200, headers: nil)
-        }
-
-        let testee = HTTPSUpgrade(store: MockHTTPSUpgradeStore(bloomFilter: bloomFilter()))
-        testee.loadData()
-        testee.isUgradeable(url: url) { result in
-            XCTAssertTrue(result)
-            expect.fulfill()
-        }
-        
-        waitForExpectations(timeout: 1.0, handler: nil)
-    }
+//    func testWhenURLIsHttpAndCannotBeUpgradedLocallyButCanBeUpgradedByServiceThenShouldUpgradeIsTrue() {
+//        let expect = expectation(description: "Http url not in local but in service list should be upgraded")
+//        let url = URL(string: "http://service.url")!
+//        stub(condition: isHost(host)) { _ in
+//            return fixture(filePath: self.serviceResponseJson(), status: 200, headers: nil)
+//        }
+//
+//        let testee = HTTPSUpgrade(store: MockHTTPSUpgradeStore(bloomFilter: bloomFilter()))
+//        testee.loadData()
+//        testee.isUgradeable(url: url) { result in
+//            XCTAssertTrue(result)
+//            expect.fulfill()
+//        }
+//        
+//        waitForExpectations(timeout: 1.0, handler: nil)
+//    }
     
     func testWhenURLIsHttpAndCannotBeUpgradedLocallyAndCannotBeUpgradedByServiceThenShouldUpgradeIsFalse() {
         let expect = expectation(description: "Http url not in local or service list should not be upgraded")
@@ -125,21 +125,21 @@ class HTTPSUpgradeTests: XCTestCase {
         waitForExpectations(timeout: 1.0, handler: nil)
     }
         
-    func testWhenBloomFilterIsNotLoadedAndUrlIsInServiceListThenShouldUpgradeIsTrue() {
-        let expect = expectation(description: "Http url in service list should upgrade")
-        let url = URL(string: "http://service.url")!
-        stub(condition: isHost(host)) { _ in
-            return fixture(filePath: self.serviceResponseJson(), status: 200, headers: nil)
-        }
-        
-        let testee = HTTPSUpgrade(store: MockHTTPSUpgradeStore(bloomFilter: bloomFilter()))
-        testee.isUgradeable(url: url) { result in
-            XCTAssertTrue(result)
-            expect.fulfill()
-        }
-        
-        waitForExpectations(timeout: 1.0, handler: nil)
-    }
+//    func testWhenBloomFilterIsNotLoadedAndUrlIsInServiceListThenShouldUpgradeIsTrue() {
+//        let expect = expectation(description: "Http url in service list should upgrade")
+//        let url = URL(string: "http://service.url")!
+//        stub(condition: isHost(host)) { _ in
+//            return fixture(filePath: self.serviceResponseJson(), status: 200, headers: nil)
+//        }
+//        
+//        let testee = HTTPSUpgrade(store: MockHTTPSUpgradeStore(bloomFilter: bloomFilter()))
+//        testee.isUgradeable(url: url) { result in
+//            XCTAssertTrue(result)
+//            expect.fulfill()
+//        }
+//        
+//        waitForExpectations(timeout: 1.0, handler: nil)
+//    }
     
     func testWhenBloomFilterIsNotLoadedAndUrlNotInServiceListThenShouldUpgradeIsFalse() {
         let expect = expectation(description: "Http url that cannot be checked locally and not in service list should not upgrade")
