@@ -374,7 +374,7 @@ class TabViewController: UIViewController {
     
     private func reloadScripts() {
         webView.configuration.userContentController.removeAllUserScripts()
-        webView.configuration.loadScripts(storageCache: storageCache, contentBlockingEnabled: !isDuckDuckGoUrl())
+//        webView.configuration.loadScripts(storageCache: storageCache, contentBlockingEnabled: !isDuckDuckGoUrl())
     }
     
     private func isDuckDuckGoUrl() -> Bool {
