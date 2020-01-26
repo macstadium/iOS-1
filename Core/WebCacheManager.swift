@@ -21,77 +21,77 @@ import WebKit
 
 public class WebCacheManager {
 
-    private struct Constants {
-        static let cookieDomain = "duckduckgo.com"
-    }
-
-    private static var allDataTypes: Set<String> {
-        return WKWebsiteDataStore.allWebsiteDataTypes()
-    }
-
-    private static var dataStore: WKWebsiteDataStore {
-        return WKWebsiteDataStore.default()
-    }
-
-    public static func consumeCookies(completion: @escaping () -> Void) {
-        guard #available(iOS 11, *) else {
-            completion()
-            return
-        }
-
-        let cookieStorage = CookieStorage()
-        let cookies = cookieStorage.cookies
-        
-        guard !cookies.isEmpty else {
-            completion()
-            return
-        }
-        
-        let semaphore = DispatchSemaphore(value: 0)
-                        
-        for cookie in cookies {
-            WebCacheManager.dataStore.httpCookieStore.setCookie(cookie) {
-                semaphore.signal()
-            }
-        }
-        
-        DispatchQueue.global(qos: .userInitiated).async {
-            for _ in 0 ..< cookies.count {
-                semaphore.wait()
-            }
-            
-            DispatchQueue.main.async {
-                cookieStorage.clear()
-                completion()
-            }
-        }
-    }
-
-    /**
-     Clears the cache of all data, except duckduckgo cookies
-     */
-    public static func clear() {
-        if #available(iOS 11, *) {
-            extractAllowedCookiesThenClear(in: WebCacheManager.dataStore.httpCookieStore)
-        } else {
-            WebCacheManager.dataStore.removeData(ofTypes: allDataTypes, modifiedSince: Date.distantPast) { }
-        }
-    }
-
-    @available(iOS 11, *)
-    private static func extractAllowedCookiesThenClear(in cookieStore: WKHTTPCookieStore) {
-        let cookieStorage = CookieStorage()
-        cookieStore.getAllCookies { cookies in
-            let cookies = cookies.filter({ $0.domain == Constants.cookieDomain })
-            for cookie in cookies {
-                cookieStorage.setCookie(cookie)
-
-            }
-
-            DispatchQueue.main.async {
-                WebCacheManager.dataStore.removeData(ofTypes: self.allDataTypes, modifiedSince: Date.distantPast) {}
-            }
-        }
-    }
+//    private struct Constants {
+//        static let cookieDomain = "duckduckgo.com"
+//    }
+//
+//    private static var allDataTypes: Set<String> {
+//        return WKWebsiteDataStore.allWebsiteDataTypes()
+//    }
+//
+//    private static var dataStore: WKWebsiteDataStore {
+//        return WKWebsiteDataStore.default()
+//    }
+//
+//    public static func consumeCookies(completion: @escaping () -> Void) {
+//        guard #available(iOS 11, *) else {
+//            completion()
+//            return
+//        }
+//
+//        let cookieStorage = CookieStorage()
+//        let cookies = cookieStorage.cookies
+//        
+//        guard !cookies.isEmpty else {
+//            completion()
+//            return
+//        }
+//        
+//        let semaphore = DispatchSemaphore(value: 0)
+//                        
+//        for cookie in cookies {
+//            WebCacheManager.dataStore.httpCookieStore.setCookie(cookie) {
+//                semaphore.signal()
+//            }
+//        }
+//        
+//        DispatchQueue.global(qos: .userInitiated).async {
+//            for _ in 0 ..< cookies.count {
+//                semaphore.wait()
+//            }
+//            
+//            DispatchQueue.main.async {
+//                cookieStorage.clear()
+//                completion()
+//            }
+//        }
+//    }
+//
+//    /**
+//     Clears the cache of all data, except duckduckgo cookies
+//     */
+//    public static func clear() {
+//        if #available(iOS 11, *) {
+//            extractAllowedCookiesThenClear(in: WebCacheManager.dataStore.httpCookieStore)
+//        } else {
+//            WebCacheManager.dataStore.removeData(ofTypes: allDataTypes, modifiedSince: Date.distantPast) { }
+//        }
+//    }
+//
+//    @available(iOS 11, *)
+//    private static func extractAllowedCookiesThenClear(in cookieStore: WKHTTPCookieStore) {
+//        let cookieStorage = CookieStorage()
+//        cookieStore.getAllCookies { cookies in
+//            let cookies = cookies.filter({ $0.domain == Constants.cookieDomain })
+//            for cookie in cookies {
+//                cookieStorage.setCookie(cookie)
+//
+//            }
+//
+//            DispatchQueue.main.async {
+//                WebCacheManager.dataStore.removeData(ofTypes: self.allDataTypes, modifiedSince: Date.distantPast) {}
+//            }
+//        }
+//    }
 
 }

@@ -200,9 +200,9 @@ class TabViewController: UIViewController {
         
         instrumentation.didPrepareWebView()
 
-        if consumeCookies {
-            consumeCookiesThenLoadUrl(url)
-        } else if let url = url {
+//        if consumeCookies {
+//            consumeCookiesThenLoadUrl(url)
+        if let url = url {
             load(url: url)
         }
     }
@@ -222,22 +222,22 @@ class TabViewController: UIViewController {
         longPressGestureRecognizer = gestrueRecognizer
     }
     
-    private func consumeCookiesThenLoadUrl(_ url: URL?) {
-        webView.configuration.websiteDataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { _ in
-            WebCacheManager.consumeCookies { [weak self] in
-                guard let strongSelf = self else { return }
-                
-                if let url = url {
-                    strongSelf.load(url: url)
-                }
-                
-                if url != nil {
-                    strongSelf.delegate?.tabLoadingStateDidChange(tab: strongSelf)
-                    strongSelf.onWebpageDidStartLoading(httpsForced: false)
-                }
-            }
-        }
-    }
+//    private func consumeCookiesThenLoadUrl(_ url: URL?) {
+//        webView.configuration.websiteDataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { _ in
+//            WebCacheManager.consumeCookies { [weak self] in
+//                guard let strongSelf = self else { return }
+//                
+//                if let url = url {
+//                    strongSelf.load(url: url)
+//                }
+//                
+//                if url != nil {
+//                    strongSelf.delegate?.tabLoadingStateDidChange(tab: strongSelf)
+//                    strongSelf.onWebpageDidStartLoading(httpsForced: false)
+//                }
+//            }
+//        }
+//    }
     
     public func load(url: URL) {
         self.url = url
@@ -853,17 +853,17 @@ extension TabViewController: WKNavigationDelegate {
                  decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         PersistentLogger.log(tabID, formatFileInfo(#file, #line), #function, "Decide Policy For Navigation Action")
-        
-        decidePolicyFor(navigationAction: navigationAction) { [weak self] decision in
-            if let url = navigationAction.request.url, decision == .allow {
-                if let isDdg = self?.appUrls.isDuckDuckGoSearch(url: url), isDdg {
-                    StatisticsLoader.shared.refreshSearchRetentionAtb()
-                }
-                self?.findInPage?.done()
-            }
-            PersistentLogger.log(self?.tabID ?? "Null tab", #file, #function, "Decision: " + decision.policyString )
-            decisionHandler(decision)
-        }
+        decisionHandler(.allow)
+//        decidePolicyFor(navigationAction: navigationAction) { [weak self] decision in
+//            if let url = navigationAction.request.url, decision == .allow {
+//                if let isDdg = self?.appUrls.isDuckDuckGoSearch(url: url), isDdg {
+//                    StatisticsLoader.shared.refreshSearchRetentionAtb()
+//                }
+//                self?.findInPage?.done()
+//            }
+//            PersistentLogger.log(self?.tabID ?? "Null tab", #file, #function, "Decision: " + decision.policyString )
+//            decisionHandler(decision)
+//        }
     }
     
     private func decidePolicyFor(navigationAction: WKNavigationAction, completion: @escaping (WKNavigationActionPolicy) -> Void) {

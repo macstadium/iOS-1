@@ -1057,7 +1057,7 @@ extension MainViewController: AutoClearWorker {
         findInPageView?.done()
         ServerTrustCache.shared.clear()
         KingfisherManager.shared.cache.clearDiskCache()
-        WebCacheManager.clear()
+//        WebCacheManager.clear()
     }
     
     fileprivate func forgetAllWithAnimation(completion: @escaping () -> Void) {
