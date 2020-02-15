@@ -51,9 +51,13 @@ class MainViewController: UIViewController {
     @IBOutlet weak var notificationContainerHeight: NSLayoutConstraint!
     
     @IBOutlet weak var statusBarBackground: UIView!
+
     @IBOutlet weak var findInPageView: FindInPageView!
+    @IBOutlet weak var instantAnswersView: InstantAnswersView!
+
     @IBOutlet weak var findInPageBottomLayoutConstraint: NSLayoutConstraint!
-    
+    @IBOutlet weak var instantAnswersPageBottomLayoutConstraint: NSLayoutConstraint!
+
     weak var notificationView: NotificationView?
     weak var homeRowCTAController: UIViewController?
 
@@ -106,6 +110,11 @@ class MainViewController: UIViewController {
 
         findInPageView.delegate = self
         findInPageBottomLayoutConstraint.constant = 0
+
+        instantAnswersView.delegate = self
+        instantAnswersPageBottomLayoutConstraint.constant = 0
+        instantAnswersView.isHidden = true
+
         registerForKeyboardNotifications()
 
         applyTheme(ThemeManager.shared.currentTheme)
@@ -135,12 +144,15 @@ class MainViewController: UIViewController {
     /// This is only really for iOS 10 devices that don't properly support the change frame approach.
     @objc private func keyboardWillHide(_ notification: Notification) {
 
+        instantAnswersView.isHidden = true
+
         guard findInPageBottomLayoutConstraint.constant > 0,
             let userInfo = notification.userInfo else {
             return
         }
 
         findInPageBottomLayoutConstraint.constant = 0
+        instantAnswersPageBottomLayoutConstraint.constant = 0
         animateForKeyboard(userInfo: userInfo, y: view.frame.height)
     }
 
@@ -164,6 +176,7 @@ class MainViewController: UIViewController {
         }
 
         findInPageBottomLayoutConstraint.constant = height
+        instantAnswersPageBottomLayoutConstraint.constant = height
         currentTab?.webView.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: height, right: 0)
         animateForKeyboard(userInfo: userInfo, y: view.frame.height - height)
     }
@@ -176,7 +189,9 @@ class MainViewController: UIViewController {
 
         let frame = self.findInPageView.frame
         UIView.animate(withDuration: duration, delay: 0, options: animationCurve, animations: {
-            self.findInPageView.frame = CGRect(x: 0, y: y - frame.height, width: frame.width, height: frame.height)
+            let frame = CGRect(x: 0, y: y - frame.height, width: frame.width, height: frame.height)
+            self.findInPageView.frame = frame
+            self.instantAnswersView.frame = frame
         }, completion: nil)
 
     }
@@ -284,6 +299,7 @@ class MainViewController: UIViewController {
 
     fileprivate func attachHomeScreen() {
         findInPageView.isHidden = true
+        instantAnswersView.isHidden = true
         chromeManager.detach()
         
         currentTab?.dismiss()
@@ -739,6 +755,7 @@ extension MainViewController: OmniBarDelegate {
 
     func onOmniQueryUpdated(_ updatedQuery: String) {
         displayAutocompleteSuggestions(forQuery: updatedQuery)
+        instantAnswersView.isHidden = updatedQuery.trimWhitespace().isEmpty
     }
 
     func onOmniQuerySubmitted(_ query: String) {
@@ -776,6 +793,9 @@ extension MainViewController: OmniBarDelegate {
     }
     
     func onTextFieldWillBeginEditing(_ omniBar: OmniBar) {
+        findInPageView.done()
+        instantAnswersView.isHidden = omniBar.textField.text?.trimWhitespace().isEmpty ?? true
+
         guard homeController == nil else { return }
         
         displayFavoritesOverlay()
@@ -1196,6 +1216,16 @@ extension MainViewController {
         self.homeRowCTAController = childViewController
     }
     
+}
+
+extension MainViewController: InstantAnswersViewDelegate {
+
+    func queryWithIA(ia: String) {
+        guard let query = omniBar.textField.text else { return }
+        let url = appUrls.searchUrl(text: query, withIA: ia)
+        loadUrl(url)
+    }
+
 }
 
 // swiftlint:enable file_length

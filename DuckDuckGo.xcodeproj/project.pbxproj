@@ -240,6 +240,7 @@
 		85CC936E203C402C00690089 /* SpeedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CC936D203C402C00690089 /* SpeedTests.swift */; };
 		85CC9376203C42A500690089 /* speed_test_sites.json in Resources */ = {isa = PBXBuildFile; fileRef = 85CC9375203C42A500690089 /* speed_test_sites.json */; };
 		85CE790721E8A9F600607B91 /* EmptySectionRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CE790621E8A9F600607B91 /* EmptySectionRenderer.swift */; };
+		85CFE2B323F76CAC009C64E3 /* InstantAnswersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CFE2B223F76CAC009C64E3 /* InstantAnswersView.swift */; };
 		85E00179225E0D4E00877BF6 /* OnboardingSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85E00178225E0D4E00877BF6 /* OnboardingSummaryViewController.swift */; };
 		85EE7F55224667DD000FE757 /* WebContainer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85EE7F54224667DD000FE757 /* WebContainer.storyboard */; };
 		85EE7F572246685B000FE757 /* WebContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EE7F562246685B000FE757 /* WebContainerViewController.swift */; };
@@ -882,6 +883,7 @@
 		85CC936F203C402C00690089 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		85CC9375203C42A500690089 /* speed_test_sites.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = speed_test_sites.json; sourceTree = "<group>"; };
 		85CE790621E8A9F600607B91 /* EmptySectionRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptySectionRenderer.swift; sourceTree = "<group>"; };
+		85CFE2B223F76CAC009C64E3 /* InstantAnswersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstantAnswersView.swift; sourceTree = "<group>"; };
 		85D08E5722B3AB1C0085C93D /* NetworkLeaderboard 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "NetworkLeaderboard 2.xcdatamodel"; sourceTree = "<group>"; };
 		85E00178225E0D4E00877BF6 /* OnboardingSummaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSummaryViewController.swift; sourceTree = "<group>"; };
 		85EE7F54224667DD000FE757 /* WebContainer.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = WebContainer.storyboard; sourceTree = "<group>"; };
@@ -1569,6 +1571,7 @@
 		84E341941E2F7EFB00BDBA6F /* DuckDuckGo */ = {
 			isa = PBXGroup;
 			children = (
+				AA4D6A8023DE4973007E8790 /* AppIcon */,
 				F1C5ECF31E37812900C599A4 /* Application */,
 				9817C9C121EF58BA00884F65 /* AutoClear */,
 				F15D43211E70849A00BF2CDC /* Autocomplete */,
@@ -1577,16 +1580,16 @@
 				839F119520DBC489007CD8C2 /* Feedback */,
 				85F2FFFE2215C163006BB258 /* FindInPage */,
 				F13B4BF31F18C73A00814661 /* Home */,
-				AA4D6A8023DE4973007E8790 /* AppIcon */,
 				84E341A11E2F7EFB00BDBA6F /* Info.plist */,
+				85CFE2B123F76C88009C64E3 /* InstantAnswers */,
 				F1C5ECFA1E37B15B00C599A4 /* Main */,
 				85AE668C20971FCA0014CF04 /* Notifications */,
 				F1C4A70C1E5771F800A6CA1B /* OmniBar */,
 				F1AE54DB1F0425BB00D9A700 /* Privacy */,
-				987E7FAF22D8F84200AD30A1 /* PrivacyReport */,
 				8533133B1F98E9C000E061A5 /* PrivacyProtection */,
-				0A6CC0EE23904D5400E4F627 /* Settings.bundle */,
+				987E7FAF22D8F84200AD30A1 /* PrivacyReport */,
 				F1AB2B401E3F75A000868554 /* Settings */,
+				0A6CC0EE23904D5400E4F627 /* Settings.bundle */,
 				F1E249411EF2075C008C947A /* SiteMonitoring */,
 				F13B4BF41F18C74500814661 /* Tabs */,
 				F1386BA21E6846320062FC3C /* TabSwitcher */,
@@ -1854,6 +1857,14 @@
 				85393120203C5F1F009C0B12 /* main.swift */,
 			);
 			path = SpeedTests;
+			sourceTree = "<group>";
+		};
+		85CFE2B123F76C88009C64E3 /* InstantAnswers */ = {
+			isa = PBXGroup;
+			children = (
+				85CFE2B223F76CAC009C64E3 /* InstantAnswersView.swift */,
+			);
+			name = InstantAnswers;
 			sourceTree = "<group>";
 		};
 		85EE7F53224667C3000FE757 /* WebContainer */ = {
@@ -3682,6 +3693,7 @@
 				F13B4BD31F1822C700814661 /* Tab.swift in Sources */,
 				F1BE54581E69DE1000FCF649 /* TutorialSettings.swift in Sources */,
 				F1126E251EA749A30016A6C7 /* BlurAnimatedTransitioning.swift in Sources */,
+				85CFE2B323F76CAC009C64E3 /* InstantAnswersView.swift in Sources */,
 				98196CFA23AA75D0007809AC /* OnboardingHomeRowViewController.swift in Sources */,
 				98F3A1D8217B37010011A0D4 /* Theme.swift in Sources */,
 				85F200002215C17B006BB258 /* FindInPage.swift in Sources */,

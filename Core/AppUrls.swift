@@ -151,8 +151,15 @@ public struct AppUrls {
      Generates a search url with the source (t) https://duck.co/help/privacy/t
      and cohort (atb) https://duck.co/help/privacy/atb
      */
-    public func searchUrl(text: String) -> URL {
-        let searchUrl = base.addParam(name: Param.search, value: text)
+    public func searchUrl(text: String, withIA ia: String? = nil) -> URL {
+        var searchUrl = base.addParam(name: Param.search, value: text)
+
+        if ia != nil {
+            searchUrl = searchUrl.addParam(name: "ia", value: ia)
+                .addParam(name: "iax", value: ia)
+                .addParam(name: "iar", value: ia)
+        }
+
         return applyStatsParams(for: searchUrl)
     }
     
