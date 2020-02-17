@@ -1104,12 +1104,12 @@ extension MainViewController: AutoClearWorker {
         Pixel.fire(pixel: .forgetAllExecuted, withAdditionalParameters: PreserveLogins.shared.forgetAllPixelParameters)
         forgetData()
         FireAnimation.animate {
-            self.forgetTabs()
             completion()
             Instruments.shared.endTimedEvent(for: spid)
+            let window = UIApplication.shared.keyWindow
+            window?.showBottomToast(UserText.actionForgetAllDone, duration: 1)
         }
-        let window = UIApplication.shared.keyWindow
-        window?.showBottomToast(UserText.actionForgetAllDone, duration: 1)
+        forgetTabs()
     }
     
 }

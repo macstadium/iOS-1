@@ -39,26 +39,46 @@ class FireAnimation: UIView {
             return
         }
 
-        let anim = FireAnimation.load(nibName: "FireAnimation")
-        anim.image.animationImages = animatedImages
-        anim.image.contentMode = window.frame.width > anim.image.animationImages![0].size.width ? .scaleAspectFill : .center
-        anim.image.startAnimating()
+        guard let image = window.takeSnapshotOfView() else {
+            return
+        }
 
-        anim.frame = window.frame
-        anim.transform.ty = anim.frame.size.height
-        window.addSubview(anim)
+        let flameThrower = FlamethrowerDaxView(frame: window.frame)
+        flameThrower.image = image
+        window.addSubview(flameThrower)
 
-        UIView.animate(withDuration: Constants.animationDuration, delay: 0, options: .curveEaseOut, animations: {
-            anim.transform.ty = -(anim.offset.constant * 2)
-        }, completion: { _ in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             completion()
-        })
+        }
 
-        UIView.animate(withDuration: Constants.endAnimationDuration, delay: Constants.endDelayDuration, options: .curveEaseOut, animations: {
-            anim.alpha = 0
-        }, completion: { _ in
-            anim.removeFromSuperview()
-        })
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            flameThrower.removeFromSuperview()
+        }
+
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+//            flameThrower.removeFromSuperview()
+//        }
+
+//        let anim = FireAnimation.load(nibName: "FireAnimation")
+//        anim.image.animationImages = animatedImages
+//        anim.image.contentMode = window.frame.width > anim.image.animationImages![0].size.width ? .scaleAspectFill : .center
+//        anim.image.startAnimating()
+//
+//        anim.frame = window.frame
+//        anim.transform.ty = anim.frame.size.height
+//        window.addSubview(anim)
+//
+//        UIView.animate(withDuration: Constants.animationDuration, delay: 0, options: .curveEaseOut, animations: {
+//            anim.transform.ty = -(anim.offset.constant * 2)
+//        }, completion: { _ in
+//            completion()
+//        })
+//
+//        UIView.animate(withDuration: Constants.endAnimationDuration, delay: Constants.endDelayDuration, options: .curveEaseOut, animations: {
+//            anim.alpha = 0
+//        }, completion: { _ in
+//            anim.removeFromSuperview()
+//        })
 
     }
 
@@ -70,6 +90,18 @@ class FireAnimation: UIView {
             images.append(image)
         }
         return images
+    }
+
+}
+
+extension UIView {
+
+    func takeSnapshotOfView() -> UIImage? {
+        UIGraphicsBeginImageContext(CGSize(width: frame.size.width, height: frame.size.height))
+        drawHierarchy(in: CGRect(x: 0.0, y: 0.0, width: frame.size.width, height: frame.size.height), afterScreenUpdates: true)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
     }
 
 }
