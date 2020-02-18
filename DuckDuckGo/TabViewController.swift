@@ -33,8 +33,15 @@ class TabViewController: UIViewController {
     }
 
     private struct UserAgent {
-        static let desktop = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Safari/605.1.15 " +
-                             WKWebViewConfiguration.ddgNameForUserAgent
+
+        static let desktop = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, like Gecko) "
+            + WKWebViewConfiguration.ddgNameForUserAgent
+            + " Version/12.0 Safari/605.1.15"
+
+        static let mobile = "Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) "
+            + WKWebViewConfiguration.ddgNameForUserAgent
+            + " Mobile/15E148"
+
     }
     
     @IBOutlet private(set) weak var error: UIView!
@@ -347,7 +354,7 @@ class TabViewController: UIViewController {
     }
     
     func updateUserAgent() {
-        webView.customUserAgent = tabModel.isDesktop ? UserAgent.desktop : nil
+        webView.customUserAgent = tabModel.isDesktop ? UserAgent.desktop : UserAgent.mobile
         if #available(iOS 13, *) {
             webView.configuration.defaultWebpagePreferences.preferredContentMode = tabModel.isDesktop ? .desktop : .mobile
         }
