@@ -31,6 +31,7 @@ class HomePageConfiguration {
     }
     
     enum Component: Equatable {
+        case privacyProtection
         case navigationBarSearch(withOffset: Bool, fixed: Bool)
         case centeredSearch(fixed: Bool)
         case favorites(withHeader: Bool)

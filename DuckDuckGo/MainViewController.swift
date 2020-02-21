@@ -78,8 +78,7 @@ class MainViewController: UIViewController {
 
     var tabManager: TabManager!
     fileprivate lazy var bookmarkStore: BookmarkUserDefaults = BookmarkUserDefaults()
-    fileprivate lazy var appSettings: AppSettings = AppUserDefaults()
-    fileprivate lazy var homePageSettings = HomePageSettings()
+    fileprivate lazy var appSettings: AppSettings & PrivacyStatsExperimentStore = AppUserDefaults()
     private weak var launchTabObserver: LaunchTabNotification.Observer?
 
     weak var tabSwitcherController: TabSwitcherViewController?
@@ -219,6 +218,12 @@ class MainViewController: UIViewController {
             controller.homePageSettingsDelegate = self
             controller.preserveLoginsSettingsDelegate = self
             return
+        }
+        
+        if let navController = segue.destination as? UINavigationController, navController.topViewController is PrivacyReportViewController {
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                segue.destination.modalPresentationStyle = .formSheet
+            }
         }
 
         if var onboarding = segue.destination as? Onboarding {
@@ -459,9 +464,10 @@ class MainViewController: UIViewController {
     }
     
     fileprivate func displayFavoritesOverlay() {
-        guard homePageSettings.favorites else { return }
+        guard HomePageSettings().favorites else { return }
 
-        guard favoritesOverlay == nil, !bookmarkStore.favorites.isEmpty else { return }
+        guard favoritesOverlay == nil,
+            BookmarksManager().favoritesCount > 0 else { return }
         
         let controller = FavoritesOverlay()
         controller.install(into: self)
@@ -521,6 +527,20 @@ class MainViewController: UIViewController {
         performSegue(withIdentifier: "ReportBrokenSite", sender: self)
     }
     
+    fileprivate func launchPrivacyReport() {
+        sendPrivacyStatsTappedPixel()
+        performSegue(withIdentifier: "PrivacyReport", sender: self)
+    }
+    
+    private func sendPrivacyStatsTappedPixel() {
+        guard !appSettings.privacyStatsPixelFired else {
+            return
+        }
+        
+        appSettings.privacyStatsPixelFired = true
+        Pixel.fire(pixel: .homeScreenPrivacyStatsTapped)
+    }
+
     fileprivate func launchSettings() {
         Pixel.fire(pixel: .settingsOpened)
         performSegue(withIdentifier: "Settings", sender: self)
@@ -794,7 +814,11 @@ extension MainViewController: AutocompleteViewControllerDelegate {
 }
 
 extension MainViewController: HomeControllerDelegate {
-
+    
+    func showPrivacyReport(_ home: HomeViewController) {
+        launchPrivacyReport()
+    }
+    
     func home(_ home: HomeViewController, didRequestQuery query: String) {
         loadQueryInNewTab(query)
     }

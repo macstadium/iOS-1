@@ -31,4 +31,6 @@ protocol HomeControllerDelegate: class {
 
     func showSettings(_ home: HomeViewController)
     
+    func showPrivacyReport(_ home: HomeViewController)
+
 }
