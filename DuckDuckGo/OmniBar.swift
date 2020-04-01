@@ -40,9 +40,10 @@ class OmniBar: UIView {
     @IBOutlet weak var separatorView: UIView!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var refreshButton: UIButton!
-
+    
     @IBOutlet weak var separatorHeightConstraint: NSLayoutConstraint!
-
+    
+//    var tapGestureRecognizer: UITapGestureRecognizer!
     weak var omniDelegate: OmniBarDelegate?
     fileprivate var state: OmniBarState = HomeNonEditingState()
     private lazy var appUrls: AppUrls = AppUrls()
@@ -56,6 +57,9 @@ class OmniBar: UIView {
         configureTextField()
         configureSeparator()
         configureEditingMenu()
+        configureTapRecognizer(for: leftSeparator)
+        configureTapRecognizer(for: rightSeparator)
+        configureTapRecognizer(for: lockIcon)
         refreshState(state)
     }
     
@@ -84,8 +88,20 @@ class OmniBar: UIView {
         UIMenuController.shared.menuItems = [UIMenuItem(title: title, action: #selector(pasteAndGo))]
     }
     
+    private func configureTapRecognizer(for view: UIView) {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(onOmniBarTap))
+        view.addGestureRecognizer(tapGestureRecognizer)
+        view.isUserInteractionEnabled = true
+    }
+    
     var textFieldBottomSpacing: CGFloat {
         return (bounds.size.height - (searchContainer.frame.origin.y + searchContainer.frame.size.height)) / 2.0
+    }
+    
+    @objc func onOmniBarTap() {
+        guard !textField.isEditing else { return }
+        
+        textField.becomeFirstResponder()
     }
     
     @objc func textDidChange() {
