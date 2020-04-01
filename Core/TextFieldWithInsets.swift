@@ -50,4 +50,14 @@ class TextFieldWithInsets: UITextField {
         let height = bounds.size.height - topInset - bottomInset
         return CGRect(x: x, y: y, width: width, height: height)
     }
+    
+    override var intrinsicContentSize: CGSize {
+        guard let label = attributedText else {
+            return .zero
+        }
+        
+        let size = label.size()
+        return CGSize(width: ceil(size.width + leftInset + rightInset),
+                      height: ceil(size.height + topInset + bottomInset))
+    }
 }

@@ -20,16 +20,32 @@
 import Foundation
 import Core
 
+enum OmniBarLeftAccesory {
+    case none
+    case privacyGrade
+    case loupe
+}
+
+enum OmniBarRightAccessory {
+    case none
+    case clear
+    case cancel
+    case refresh
+}
+
 protocol OmniBarState {
+    var leftAccessory: OmniBarLeftAccesory { get }
+    var rightAccessory: OmniBarRightAccessory { get }
+    
+    var showLeftSeparator: Bool { get }
+    var showRightSeparator: Bool { get }
+    
+    var showLock: Bool { get }
+    
     var clearTextOnStart: Bool { get }
-    var showSearchLoupe: Bool { get }
     var showCancel: Bool { get }
-    var showSiteRating: Bool { get }
     var showBackground: Bool { get }
-    var showClear: Bool { get }
-    var showRefresh: Bool { get }
     var showMenu: Bool { get }
-    var showBookmarks: Bool { get }
     var showSettings: Bool { get }
     var name: String { get }
     var onEditingStoppedState: OmniBarState { get }
@@ -42,13 +58,16 @@ protocol OmniBarState {
 
 struct HomeEmptyEditingState: OmniBarState {
     var clearTextOnStart = true
-    var showSearchLoupe = true
-    let showSiteRating = false
+    var leftAccessory: OmniBarLeftAccesory = .loupe
+    var rightAccessory: OmniBarRightAccessory = .none
+    
+    var showLeftSeparator = false
+    var showRightSeparator = false
+    
+    let showLock = false
+    
     let showBackground = false
-    let showClear = false
-    let showRefresh = false
     let showMenu = false
-    let showBookmarks = false
     let showSettings = false
     let showCancel: Bool = true
     var name: String { return Type.name(self) }
@@ -62,13 +81,16 @@ struct HomeEmptyEditingState: OmniBarState {
 
 struct HomeTextEditingState: OmniBarState {
     var clearTextOnStart = false
-    var showSearchLoupe = true
-    let showSiteRating = false
+    var leftAccessory: OmniBarLeftAccesory = .loupe
+    var rightAccessory: OmniBarRightAccessory = .clear
+    
+    var showLeftSeparator = false
+    var showRightSeparator = false
+    
+    let showLock = false
+    
     let showBackground = false
-    let showClear = true
-    let showRefresh = false
     let showMenu = false
-    let showBookmarks = false
     let showSettings = false
     let showCancel: Bool = true
     var name: String { return Type.name(self) }
@@ -82,13 +104,16 @@ struct HomeTextEditingState: OmniBarState {
 
 struct HomeNonEditingState: OmniBarState {
     var clearTextOnStart = true
-    var showSearchLoupe = true
-    let showSiteRating = false
+    var leftAccessory: OmniBarLeftAccesory = .loupe
+    var rightAccessory: OmniBarRightAccessory = .none
+    
+    var showLeftSeparator = false
+    var showRightSeparator = false
+    
+    let showLock = false
+    
     let showBackground = true
-    let showClear = false
-    let showRefresh = false
     let showMenu = false
-    let showBookmarks = false
     let showSettings = true
     let showCancel: Bool = false
     var name: String { return Type.name(self) }
@@ -102,13 +127,16 @@ struct HomeNonEditingState: OmniBarState {
 
 struct BrowsingEmptyEditingState: OmniBarState {
     var clearTextOnStart = true
-    var showSearchLoupe = true
-    let showSiteRating = false
+    var leftAccessory: OmniBarLeftAccesory = .loupe
+    var rightAccessory: OmniBarRightAccessory = .none
+    
+    var showLeftSeparator = false
+    var showRightSeparator = false
+    
+    let showLock = false
+    
     let showBackground = false
-    let showClear = false
-    let showRefresh = false
     let showMenu = false
-    let showBookmarks = false
     let showSettings = false
     let showCancel: Bool = true
     var name: String { return Type.name(self) }
@@ -122,13 +150,16 @@ struct BrowsingEmptyEditingState: OmniBarState {
 
 struct BrowsingTextEditingState: OmniBarState {
     var clearTextOnStart = false
-    var showSearchLoupe = true
-    let showSiteRating = false
+    var leftAccessory: OmniBarLeftAccesory = .none
+    var rightAccessory: OmniBarRightAccessory = .clear
+    
+    var showLeftSeparator = false
+    var showRightSeparator = false
+    
+    let showLock = false
+    
     let showBackground = false
-    let showClear = true
-    let showRefresh = false
     let showMenu = false
-    let showBookmarks = false
     let showSettings = false
     let showCancel: Bool = true
     var name: String { return Type.name(self) }
@@ -142,13 +173,16 @@ struct BrowsingTextEditingState: OmniBarState {
 
 struct BrowsingNonEditingState: OmniBarState {
     var clearTextOnStart = false
-    var showSearchLoupe = false
-    let showSiteRating = true
+    var leftAccessory: OmniBarLeftAccesory = .privacyGrade
+    var rightAccessory: OmniBarRightAccessory = .refresh
+    
+    var showLeftSeparator = true
+    var showRightSeparator = true
+    
+    let showLock = true
+    
     let showBackground = true
-    let showClear = false
-    let showRefresh = true
     let showMenu = true
-    let showBookmarks = false
     let showSettings = false
     let showCancel: Bool = false
     var name: String { return Type.name(self) }

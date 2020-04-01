@@ -29,10 +29,12 @@ class OmniBar: UIView {
     @IBOutlet weak var searchContainer: UIView!
     @IBOutlet weak var searchStackContainer: UIStackView!
     @IBOutlet weak var siteRatingView: SiteRatingView!
+    @IBOutlet weak var lockIcon: UIImageView!
+    @IBOutlet weak var leftSeparator: UIView!
+    @IBOutlet weak var rightSeparator: UIView!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var editingBackground: RoundedRectangleView!
     @IBOutlet weak var clearButton: UIButton!
-    @IBOutlet weak var bookmarksButton: UIButton!
     @IBOutlet weak var menuButton: UIButton!
     @IBOutlet weak var settingsButton: UIButton!
     @IBOutlet weak var separatorView: UIView!
@@ -131,16 +133,42 @@ class OmniBar: UIView {
             state = newState
         }
 
-        setVisibility(searchLoupe, hidden: !state.showSearchLoupe)
-        setVisibility(siteRatingView, hidden: !state.showSiteRating)
-        setVisibility(clearButton, hidden: !state.showClear)
+        switch state.leftAccessory {
+        case .none:
+            setVisibility(searchLoupe, hidden: true)
+            setVisibility(siteRatingView, hidden: true)
+        case .loupe:
+            setVisibility(searchLoupe, hidden: false)
+            setVisibility(siteRatingView, hidden: true)
+        case .privacyGrade:
+            setVisibility(searchLoupe, hidden: true)
+            setVisibility(siteRatingView, hidden: false)
+        }
+        
+        switch state.rightAccessory {
+        case .none:
+            setVisibility(clearButton, hidden: true)
+            setVisibility(refreshButton, hidden: true)
+        case .clear:
+            setVisibility(clearButton, hidden: false)
+            setVisibility(refreshButton, hidden: true)
+        case .refresh:
+            setVisibility(clearButton, hidden: true)
+            setVisibility(refreshButton, hidden: false)
+        case .cancel:
+            setVisibility(clearButton, hidden: true)
+            setVisibility(refreshButton, hidden: true)
+        }
+        
+        setVisibility(leftSeparator, hidden: !state.showLeftSeparator)
+        setVisibility(rightSeparator, hidden: !state.showRightSeparator)
+        setVisibility(lockIcon, hidden: !state.showLock)
         setVisibility(menuButton, hidden: !state.showMenu)
-        setVisibility(bookmarksButton, hidden: !state.showBookmarks)
         setVisibility(settingsButton, hidden: !state.showSettings)
         setVisibility(cancelButton, hidden: !state.showCancel)
-        setVisibility(refreshButton, hidden: !state.showRefresh)
 
         updateSearchBarBorder()
+        
     }
 
     private func updateSearchBarBorder() {
@@ -195,7 +223,7 @@ class OmniBar: UIView {
         }
 
         if let query = appUrls.searchQuery(fromUrl: url) {
-            textField.text = query
+            textField.attributedText = NSMutableAttributedString(string: query)
         } else {
             textField.attributedText = OmniBar.demphasisePath(forUrl: url)
         }
@@ -256,10 +284,6 @@ class OmniBar: UIView {
 
     @IBAction func onMenuButtonPressed(_ sender: UIButton) {
         omniDelegate?.onMenuPressed()
-    }
-
-    @IBAction func onBookmarksButtonPressed(_ sender: Any) {
-        omniDelegate?.onBookmarksPressed()
     }
 
     @IBAction func onSettingsButtonPressed(_ sender: Any) {

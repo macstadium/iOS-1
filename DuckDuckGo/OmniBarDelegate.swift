@@ -31,8 +31,6 @@ protocol OmniBarDelegate: class {
     
     func onMenuPressed()
     
-    func onBookmarksPressed()
-    
     func onSettingsPressed()
     
     func onCancelPressed()
@@ -64,10 +62,6 @@ extension OmniBarDelegate {
     }
     
     func onMenuPressed() {
-        
-    }
-    
-    func onBookmarksPressed() {
         
     }
     
